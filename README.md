@@ -1,6 +1,8 @@
-[![CircleCI](https://circleci.com/gh/robustrobotics/flame_ros/tree/master.svg?style=shield)](https://circleci.com/gh/robustrobotics/flame_ros/tree/master)
+#### This is flame_ros package with updated dockerfile and several scripts, see [Quickstart](##Quickstart) section for more details.
+Docker image building and example running tested on ubuntu 20.04.
 
 # flame_ros
+
 **FLaME** (Fast Lightweight Mesh Estimation) is a lightweight, CPU-only method
 for dense online monocular depth estimation. Given a sequence of camera images
 with known poses, **FLaME** is able to reconstruct dense 3D meshes of the
@@ -29,13 +31,15 @@ found [here](https://github.com/robustrobotics/flame.git).
 Build the provided [Docker](https://www.docker.com/) image and run an example
 dataset (requires [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) for
 rviz):
-```bash
-# Build the image.
+1. Prepare SSH key (for clone repos in dockerfile, `/scripts/Dockerfile`)
+2. Build image
+```
 cd flame_ros
-docker build --rm -t flame -f scripts/Dockerfile .
-
-# Run an example dataset.
-./scripts/flame_docker_example.sh
+sudo docker build --rm -t flame -f scripts/Dockerfile --build-arg SSH_KEY="$(cat PATH_TO_PRIVATE_SSH_KEY(e.c. ~/.ssh/ssh_key))" .
+```
+3. Run an example dataset
+```
+sudo ./scripts/flame_docker_example.sh
 ```
 You may need to run `xhost +local:root` in order to forward rviz outside the container.
 
@@ -70,8 +74,8 @@ mkdir -p flame_ws/src
 
 # Checkout flame and flame_ros into workspace.
 cd flame_ws/src
-git clone https://github.com/robustrobotics/flame.git
-git clone https://github.com/robustrobotics/flame_ros.git
+git clone https://github.com/kiru883/flame.git
+git clone https://github.com/kiru883/flame_ros.git
 
 # Initialize workspace.
 cd ..

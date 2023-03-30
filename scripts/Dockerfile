@@ -1,12 +1,22 @@
 FROM osrf/ros:kinetic-desktop-full
 
+ARG SSH_KEY
+ENV SSH_KEY=$SSH_KEY
+
 # nvidia-docker hooks
 LABEL com.nvidia.volumes.needed="nvidia_driver"
 ENV PATH /usr/local/nvidia/bin:${PATH}
 ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
 
+# prepare
+RUN  apt-get update -y && \
+     apt-get upgrade -y && \
+     apt-get dist-upgrade -y && \
+     apt-get -y autoremove && \
+     apt-get clean
+
 # Install general software dependencies.
-RUN apt-get update
+RUN apt-get install -y unzip
 RUN apt-get install -y apt-utils lsb-release
 RUN apt-get install -y git openssh-client wget
 RUN apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
@@ -23,6 +33,14 @@ RUN apt-get update && apt-get install -y python-catkin-tools
 RUN mkdir -p flame_ws/src
 
 # Clone the repo into the docker container.
+RUN mkdir /root/.ssh/
+RUN echo "$SSH_KEY" > /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+RUN touch /root/.ssh/known_hosts
+RUN ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+RUN ssh-keyscan gitlab.com >> /root/.ssh/known_hosts
+
 RUN cd flame_ws/src && git clone https://github.com/kiru883/flame.git
 RUN cd flame_ws/src && git clone https://github.com/kiru883/flame_ros.git
 

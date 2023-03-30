@@ -1,4 +1,4 @@
-#### This is flame_ros package with updated dockerfile and several scripts, see [Quickstart](##Quickstart) section for more details.
+#### This is flame_ros package with updated dockerfile and several scripts, see [Quickstart](#Quickstart) section for more details.
 Docker image building and example running tested on ubuntu 20.04.
 
 # flame_ros
